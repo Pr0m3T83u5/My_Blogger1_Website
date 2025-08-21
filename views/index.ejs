@@ -1,0 +1,19 @@
+<%- include('partials/header') %>
+    <div class="flex-container">
+        <div id="homeScreen">
+            <h1>Welcome <span id="userBreak"><%= locals.username%> </span></h1>
+                <a id="WriteBlog" class="blog-writer-button" href="/write">
+                    Write a blog and express yourself
+                </a>
+        </div>
+        <div id="blog-content">
+            <div id="yourBlogs">Your Blogs</div>
+            <% if(locals.blogList.length === 0){ %>
+                <div id="no-blogs">You have not written any blogs yet!</div>
+            <% } %>
+            <!-- <% //else { %>
+                <div><p>Your Blog</p></div>
+            <% //} %> -->
+        </div>
+    </div>
+<%- include('partials/footer') %>
