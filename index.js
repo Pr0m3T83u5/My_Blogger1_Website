@@ -7,6 +7,7 @@ const PORT = 3000;
 
 var userLoggedIn = false; // Simulating user login status
 var blogList = [];
+var blogIdCounter = 1; // Counter for unique blog IDs
 
 app.use(express.static('public')); // Serve static files from the 'public' directory
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
@@ -35,6 +36,7 @@ app.post('/logout', (req, res) => {
         }
         userLoggedIn = false; // Reset login status
         blogList = []; // Clear the blog list
+        blogIdCounter = 1; // Reset blog ID counter
         res.redirect('/login'); // Redirect to login page
     });
 });
@@ -56,6 +58,22 @@ app.get('/home', (req, res) => {
     blogList: blogList
   });
 });
+
+
+// Submitted blog route
+app.post('/submitted-blog', (req, res) => {
+    const blogData = {
+      id: blogIdCounter++, // Assign unique ID and increment counter
+      title: req.body['title'], 
+      text: req.body['text'],
+      author: req.session.username || 'Anonymous', 
+    };
+    console.log(blogData);
+    blogList.push(blogData); // Save blogData to the in-memory list
+    console.log(blogList);
+});
+
+
 
 // Write blog route
 app.get('/write', (req, res) => {

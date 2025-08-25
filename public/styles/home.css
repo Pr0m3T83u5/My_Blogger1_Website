@@ -1,3 +1,21 @@
+
+/* Styles for Home Page 
+
+The Styles are organized as follows:
+
+==>Body
+==>Homescreen
+>media query for homescreen
+==>Blog Button
+==>Blog Content
+    >Your Blogs
+    >No Blogs
+    >Blog Entry
+>media query for blog content
+*/
+
+/* ====================================================== */
+/* Body */
 body{
     background-color: white;
     margin: 0;
@@ -5,12 +23,15 @@ body{
 
     font-family: Arial, Helvetica, sans-serif;
 }
-.flex-container {
+.index-flex-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     height: 100vh;
 }
+
+/* ====================================================== */
+/* Homescreen */
 #homeScreen {
     display: flex;
     flex-direction: column;
@@ -36,8 +57,8 @@ body{
         display: block;
     }
 }
-
-
+/* ====================================================== */
+/* Blog Button */
 .blog-writer-button {
     background-color: #1B56FD;
     color: white;
@@ -52,32 +73,82 @@ body{
     color: white;
     margin: 0;
 }
+/* ====================================================== */
 
-#blog-content{
-    width: 100%;
-    margin-top: 30px;
-    border-radius: 10px;
-    font-size: 20px
-}
-#yourBlogs{
+/* Blog Content > your blogs */
+#yourBlogs{      
     font-size: 30px;
     font-style: italic;
 
     width: 100%;
-    margin-top: 30px;
-    padding: 1px;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding: 12px;
     border-radius: 10px;
     background-color: #E9DFC3;  
     justify-self: center;
 }
 
-#yourBlogs{
-    margin: 0;
-    padding: 12px;
+
+/* Blog Content */
+#blog-content{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 10px;
+    width: 100%;
+    border-radius: 10px;
+    font-size: 20px;
+    height: 100%;
 }
+
+
+/* Blog Content > no blogs entries present */
 #no-blogs{
     margin: 10px;
 }
+
+
+/* Blog Content > blog entries are present */
+.blog-entry{
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 300px;
+
+    border: 3px solid black;
+
+    padding: 0px;
+    margin: 5px;
+}
+
+
+.blog-content-title{
+    text-align: left;
+    font-size: 18px;
+
+    padding-top: 10px;
+    padding-left: 10px;
+    margin: 0px;
+    height: 55%;
+
+    background-color: lightgray;
+}
+
+.blog-content-author{
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 15px;
+    
+    padding: 10px;
+    margin: 0px;
+
+    height: 40%;
+
+    background-color: aliceblue;
+}
+
+
+
 @media (max-width: 840px) {
     #yourBlogs{
         text-align: center;

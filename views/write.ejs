@@ -3,9 +3,9 @@
     <div id="blogHeading" class="blogText-class">
         <form action="/write-blog" class="blogText-form" method="POST">
             <label for="blog-title" id="blogTitle">Blog Title:</label>
-            <input type="text" id="blog-title" name="blog-title" required>
+            <input type="text" id="blog-title" name="blog-title" autofocus autocomplete="off" placeholder="Enter your Blog Title"  required>
             <label for="blog-text" id="writeYourBlogHere">Write your blog here...</label>
-            <textarea id="blog-text" name="blog-text" required></textarea>
+            <textarea id="blog-text" name="blog-text" placeholder="Express yourself here..." required></textarea>
         </form>
     </div>
     <div role="button" tabindex="0" id="blogSubmit">Submit</div>

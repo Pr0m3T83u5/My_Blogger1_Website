@@ -1,19 +1,26 @@
 <%- include('partials/header') %>
-    <div class="flex-container">
+    <div class="index-flex-container">
         <div id="homeScreen">
             <h1>Welcome <span id="userBreak"><%= locals.username%> </span></h1>
                 <a id="WriteBlog" class="blog-writer-button" href="/write">
                     Write a blog and express yourself
                 </a>
         </div>
-        <div id="blog-content">
-            <div id="yourBlogs">Your Blogs</div>
+
+        <div id="yourBlogs">Your Blogs</div>
+            <div id="blog-content">    
             <% if(locals.blogList.length === 0){ %>
+                <!--If not Blogs written-->
                 <div id="no-blogs">You have not written any blogs yet!</div>
-            <% } %>
-            <!-- <% //else { %>
-                <div><p>Your Blog</p></div>
-            <% //} %> -->
+            <% } else { %>
+                <!--loads blog button for each written by the user from blogList-->
+                <% locals.blogList.forEach(function(blog) { %>
+                    <button id="blog<%= blog.id %>" class="blog-entry"> <!--individual blog entry id-->
+                        <div class="blog-content-title blog-content-text"><%= blog.title %></div>
+                       <div class="blog-content-author blog-content-text">author: <%= blog.author %></div>
+                    </button>
+                <% }); %>
+                <% } %>
         </div>
     </div>
 <%- include('partials/footer') %>
