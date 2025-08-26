@@ -1,0 +1,15 @@
+<%- include('partials/header') %>
+    <div class="flex-container-for-bbr"> <!--bbr = blog being read--> 
+        <div id="edit-delete-blogs">
+            <a id="edit-blog" class="blog-button edit-delete-button" href="/blog/<%= blog['id'] %>/edit">Edit Blog</a>
+            <form action="/blog/<%= blog.id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete this blog?');">
+                <button type="submit" class="blog-button danger">Delete</button>
+            </form>
+        </div>   
+        <div id="bbr">
+            <div id="bbr-title"><%= blog['title'] %></div>
+            <div id="bbr-author">author: <%= blog['author'] %></div>
+            <div id="bbr-content"><%= blog['content'] %></div>
+        </div>
+    </div>
+<%- include('partials/footer') %>

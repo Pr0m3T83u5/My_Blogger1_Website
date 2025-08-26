@@ -2,7 +2,7 @@
     <div class="index-flex-container">
         <div id="homeScreen">
             <h1>Welcome <span id="userBreak"><%= locals.username%> </span></h1>
-                <a id="WriteBlog" class="blog-writer-button" href="/write">
+                <a id="WriteBlog" class="blog-button" href="/write">
                     Write a blog and express yourself
                 </a>
         </div>
@@ -15,10 +15,10 @@
             <% } else { %>
                 <!--loads blog button for each written by the user from blogList-->
                 <% locals.blogList.forEach(function(blog) { %>
-                    <button id="blog<%= blog.id %>" class="blog-entry"> <!--individual blog entry id-->
+                    <a href="/blog/<%= blog.id %>" id="blog-id-<%= blog.id %>" class="blog-entry"> <!--individual blog entry id-->
                         <div class="blog-content-title blog-content-text"><%= blog.title %></div>
                        <div class="blog-content-author blog-content-text">author: <%= blog.author %></div>
-                    </button>
+                    </a>
                 <% }); %>
                 <% } %>
         </div>

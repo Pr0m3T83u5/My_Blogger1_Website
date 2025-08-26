@@ -1,11 +1,13 @@
 
-
+// Handle logout click event
 $('#logout-ref').click(function() {
     alert("Do you really want to Log-out, all your saved blogs will be lost!");
     $.post('/logout')
 });
 
 
+
+// Handle blog submission
 $('#blogSubmit').click(function() {
     // Get values from the form fields
     const title = $('#blog-title').val();
@@ -14,50 +16,55 @@ $('#blogSubmit').click(function() {
         alert("Please fill in both the title and the text fields.");
         return; // Exit if fields are empty
     }
-
-    // Create a dictionary (object)
+    // Create a dictionary for blog data (object)
     const blogData = {
         title: title,
-        text: text
+        content: text
     };
-
     alert("Do you really want to submit your blog?");
-    // console.log(blogData); // For testing: see the object in the console
-
-    $.post('/submitted-blog', blogData, function(response) {
-    // handle server response
+    $.post('/submitted-blog', blogData, function() {
+        window.location.href = '/home'; // Redirect to home after submission 
     });
 });
 
-$('.blog-entry').click(function() {
-    alert("Feature coming soon: View full blog in a new window!");
-    // const blogId = $(this).attr('id').replace('blog', ''); // Extract ID from button ID
-    // const blogElement = $('#blog' + blogId);
-    // const title = blogElement.find('.blog-content-title').text();
-    // const author = blogElement.find('.blog-content-author').text();
-    // const text = blogElement.find('.blog-content-text').text();
 
-    // // Create a new window and write the blog content into it
-    // const blogWindow = window.open('', '_blank', 'width=600,height=400');
-    // blogWindow.document.write(`
-    //     <html>
-    //     <head>
-    //         <title>${title}</title>
-    //         <style>
-    //             body { font-family: Arial, sans-serif; padding: 20px; }
-    //             h1 { font-size: 24px; }
-    //             h3 { font-size: 18px; color: gray; }
-    //             p { font-size: 16px; line-height: 1.5; }
-    //         </style>
-    //     </head>
-    //     <body>
-    //         <h1>${title}</h1>
-    //         <h3>${author}</h3>
-    //         <p>${text}</p>
-    //     </body>
-    //     </html>
-    // `);
-    // blogWindow.document.close(); // Close the document to finish loading
+
+// Handle when edit or delete button is clicked
+$('.edit-delete-button').click(function() {
+    let blogId = $(this).attr('id').split('-')[2]; // Extract blog ID from button ID
+    let action = $(this).attr('id').split('-')[0]; // "edit" or "delete"
+    if (action === 'delete') {
+        if (confirm("Are you sure you want to delete this blog?")) {
+            $.post(`/blog/${blogId}/delete`, function() {
+                window.location.href = '/home'; // ✅ Redirect after success
+            });
+        }
+    } else if (action === 'edit') {
+        $.post(`/blog/${blogId}/edit`);
+    }
 });
+
+// Handle confirm Edit blog event
+$('#blogEdit').click(function() {
+    // Get values from the form fields
+    let title = $('#blog-title').val();
+    let text = $('#blog-text').val();
+    let id = $('#id').val();
+    if (title==='' || text ==='') {
+        alert("Please fill in both the title and the text fields.");
+        return; // Exit if fields are empty
+    }
+    // Create a dictionary for blog data (object)
+    let blogData = {
+        id: id,
+        title: title,
+        content: text
+    };
+    alert("Confirm?");
+    $.post('/edit-blog/'+id, blogData,function() {
+        window.location.href = '/home'; // Redirect to home after editing
+    });
+});
+
 
 

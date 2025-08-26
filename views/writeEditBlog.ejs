@@ -1,0 +1,24 @@
+<%- include('partials/header') %>
+<div id="blog">
+    <div id="blogHeading" class="blogText-class"></div>
+        <% if(locals.action === 'write') {%>
+            <form action="/write-blog" class="blogText-form" method="POST">
+                <label for="blog-title" id="blogTitle">Blog Title:</label>
+                <input type="text" id="blog-title" name="blog-title" autofocus autocomplete="off" placeholder="Enter your Blog Title"  required>
+                <label for="blog-text" id="writeYourBlogHere">Write your blog here...</label>
+                <textarea id="blog-text" name="blog-text" placeholder="Express yourself here..." required></textarea>  
+            </form>
+            <button id="blogSubmit" class="blog-button">Submit</button>
+        <% } else if(locals.action ==='edit') { %>
+            <form action="/edit-blog" class="blogText-form" method="POST">
+                <input type="hidden" id="id" name="id" value="<%= locals.blogID %>">
+                <label for="blog-title" id="blogTitle">Blog Title:</label>
+                <input type="text" id="blog-title" name="blog-title" value="<%= locals.blog.title %>" autofocus autocomplete="off" placeholder="Enter your Blog Title" required>
+                <label for="blog-text" id="writeYourBlogHere">Edit your blog here...</label>
+                <textarea id="blog-text" name="blog-text" placeholder="Express yourself here..." required><%= locals.blog.content %></textarea>
+            </form>
+            <button id="blogEdit" class="blog-button">Confirm</button>
+        <%} %>
+    </div> 
+</div>
+<%- include('partials/footer') %>

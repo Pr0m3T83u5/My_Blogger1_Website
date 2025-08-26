@@ -1,4 +1,5 @@
 
+
 /* Styles for Home Page 
 
 The Styles are organized as follows:
@@ -59,7 +60,7 @@ body{
 }
 /* ====================================================== */
 /* Blog Button */
-.blog-writer-button {
+.blog-button {
     background-color: #1B56FD;
     color: white;
     padding: 10px 20px;
@@ -68,7 +69,7 @@ body{
     cursor: pointer;
     font-size: 1.2rem;
 }
-.blog-writer-button > a{
+.blog-button > a{
     text-decoration: none;
     color: white;
     margin: 0;
