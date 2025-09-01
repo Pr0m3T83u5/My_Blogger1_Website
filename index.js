@@ -46,8 +46,12 @@ app.post('/logout', (req, res) => {
             return res.status(500).send('Could not log out.');
         }
         userLoggedIn = false; // Reset login status
-        blogList = []; // Clear the blog list
-        blogIdCounter = 1; // Reset blog ID counter
+        blogList = [{ id: 1, 
+  title: 'Welcome', 
+  content: 'Welcome to the Blogger1 Website, enjoy your stay!', 
+  author: 'Creator' }]; // Clear the blog list
+        
+        blogIdCounter = 2; // Reset blog ID counter
         res.redirect('/login'); // Redirect to login page
     });
 });
@@ -61,10 +65,12 @@ app.post('/home', (req, res) => {
 });
 
 app.get('/home', (req, res) => {
+  // console.log(blogList);
   res.render('index.ejs', {
     username: req.session.username || 'Guest',
     blogList: blogList
   });
+  console.log(blogList);
 });
 
 
@@ -93,6 +99,7 @@ app.get('/blog/:id', (req, res) => {
       let bbrId = parseInt(req.params.id, 10); // Get blogID from path parameter
       let blog = blogList.find(b => b.id === bbrId); // Find the blog with the matching ID
       res.render('readBlog.ejs', { blog: blog });
+      console.log(blog);
     });
 
 
@@ -101,6 +108,7 @@ app.get('/blog/:id', (req, res) => {
 // Getting the Edit request for the particular blog
 app.post('/blog/:id/edit', (req, res) => {
   let blogId = parseInt(req.params.id, 10);
+  console.log(blogId);
   res.redirect('/blog/'+blogId+'/edit');
 });
 // Rendering the edit page with the blog details
@@ -122,11 +130,10 @@ app.post('/edit-blog/:id', (req, res) => {
   }
 });
 
-console.log(blogList);
 // Delete blog route
 app.post('/blog/:id/delete', (req, res) => {
   const blogId = parseInt(req.params.id, 10);
- blogList = blogList.filter(b => b.id !== blogId); // Remove the blog from the list
+  blogList = blogList.filter(b => b.id !== blogId); // Remove the blog from the list
   res.redirect('/home'); // Redirect to home to see the updated blog list
 });
 

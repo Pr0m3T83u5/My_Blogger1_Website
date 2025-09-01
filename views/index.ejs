@@ -1,13 +1,13 @@
 <%- include('partials/header') %>
     <div class="index-flex-container">
         <div id="homeScreen">
-            <h1>Welcome <span id="userBreak"><%= locals.username%> </span></h1>
+            <h1 class="text-light-roboto">Welcome <br><span id="userBreak"><%= locals.username%> </span></h1>
                 <a id="WriteBlog" class="blog-button" href="/write">
                     Write a blog and express yourself
                 </a>
         </div>
 
-        <div id="yourBlogs">Your Blogs</div>
+        <div id="yourBlogs"><p class="text-light-roboto">Your Blogs</p></div>
             <div id="blog-content">    
             <% if(locals.blogList.length === 0){ %>
                 <!--If not Blogs written-->

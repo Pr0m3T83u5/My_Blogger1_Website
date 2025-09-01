@@ -5,18 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blogger-1</title>
     <link rel="stylesheet" href="styles/login.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 
 
 <body>
-    <p class="login-heading">Welcome to B1ogger One</p>
+    <p class="login-heading">Welcome to B<span id="text1">1</span>ogger One</p>
     <div class="login-home-flex-container">
         <div id="login-box">
             <p>Enter your username!</p>
             <form action="/home" method="POST">
                 <input class="login-Text" type="text" id="username" name="username" required>
                 <br>
-                <div class="login-button"><button type="submit">Login</button></div>
+                <button class="login-button" type="submit">Login</button>
             </form>
         </div>
     </div>

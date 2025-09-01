@@ -2,7 +2,9 @@
 // Handle logout click event
 $('#logout-ref').click(function() {
     alert("Do you really want to Log-out, all your saved blogs will be lost!");
-    $.post('/logout')
+    $.post('/logout', function(){
+         window.location.href = '/login';
+    });
 });
 
 
@@ -40,7 +42,9 @@ $('.edit-delete-button').click(function() {
             });
         }
     } else if (action === 'edit') {
-        $.post(`/blog/${blogId}/edit`);
+        $.post(`/blog/${blogId}/edit`, function(){
+            window.location.href = "/blog/"+ blogId +"/edit";
+        });
     }
 });
 
