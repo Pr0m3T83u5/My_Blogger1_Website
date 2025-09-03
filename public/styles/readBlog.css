@@ -1,36 +1,53 @@
+
+
+/* Styles for reading Blog Page 
+
+The Styles are organized as follows:
+
+==>Edit-Delete Button styles
+==>Blog Being Read Screen
+>media queries for blog content
+*/
+
+/* Edit-Delete Button styles */
 #edit-delete-blogs{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+
     gap: 10px;
     padding: 20px;
 }
-.edit-delete-button{
-    
-}
+
 .danger:hover{
     background-color: red;
 }
 
-
+/* ====================================================== */
+/* Blog Being Read(bbr) Screen */
 #bbr-title{
+    text-align: center;
+    font-family: "Roboto",sans-serif;
+
     font-size: 3rem;
     font-weight: 450;
-    text-align: center;
 }
 #bbr-author{
     color: #FF9A00;
     font-weight:300;
+
     padding-left: 3rem
 }
 #bbr-content{
     font-size: 1.2rem;
-    padding-left: 3rem
 
+    padding-left: 3rem;
 }
-#read-baac{
+#read-hr-baac{   /* baac = between author and content */
+    width: 90%;
 
     border: dotted 4px;
     border-bottom: none;
-    width: 90%;
 }
+/*======================================================= */
+/* Media Queries for blog content */

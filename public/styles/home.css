@@ -4,125 +4,117 @@
 
 The Styles are organized as follows:
 
-==>Body
+==>General
 ==>Homescreen
->media query for homescreen
 ==>Blog Button
+==>Your Blogs
 ==>Blog Content
-    >Your Blogs
     >No Blogs
     >Blog Entry
->media query for blog content
+    >Individual blog entry components
+>media queries for blog content
 */
 
-/* ====================================================== */
-/* Body */
-body{
-    background-color: white;
-    /* background: linear-gradient(to right, #1E3A8A, #2563EB); */
 
-    margin: 0;
-    padding: 0;
-
-    font-family: Arial, Helvetica, sans-serif;
-}
-.index-flex-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-}
-
-
-/* ====================================================== */
-/* Homescreen */
-#homeScreen {
+.flex-column-center{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+body{
+    background-color: white;
+    font-family: Arial, Helvetica, sans-serif;
+
+    margin: 0;
+    padding: 0;
+}
+.index-container {
+    height: 100vh;
+}
+
+/* the anchor tag <a> is styled in navbar
+a{
+    color: black;
+    text-decoration: none;
+
+    font-size: 1rem;
+    font-weight: 400;
+
+    transition: color 0.3s ease;
+}
+*/
+
+/* ====================================================== */
+/* Homescreen */
+#homeScreen {
     width: 100%;
     padding: 1.5rem;
 }
 #homeScreen h1 {
+    text-align: center;
+    font-family: "Roboto",sans-serif;
     font-size: 70px;
+    font-weight: 350;
+
     padding: 1.5rem;
+    margin: 0;
 }
 #userBreak{
     display: inline;
     font-style: normal;
 }
-/* @media (max-width: 1000px) {
-    #homeScreen h1 {
-        align-items: center;
-        text-align: center;
-        font-size: 50px;
-    }
-    #userBreak{
-        display: block;
-    }
-} */
+
 /* ====================================================== */
 /* Blog Button */
 .blog-button {
     background-color: rgba(19, 30, 92, 0.95);
     color: #FFFFFF;
-    padding: 10px 20px;
+    font-size: 1.2rem;
+
     border: none;
     border-radius: 10px;
-    cursor: pointer;
-    font-size: 1.2rem;
+    
+    padding: 10px 20px;
+
     transition: all 0.3s ease;
+    cursor: pointer;
 }
 .blog-button:hover{
-    transform: scale(1.05);
     background-color: #FF9A00;
     color: rgba(15, 23, 42, 0.95); 
+    transform: scale(1.05);
 }
 .blog-button > a{
-    text-decoration: none;
     color: white;
+    text-decoration: none;
+
     margin: 0;
 }
 
-/* @media (max-width: 1000px) {
-    .blog-button{
-    font-size: 0.8rem;
-    }
-} */
 /* ====================================================== */
-
-/* Blog Content > your blogs */
-#yourBlogs{      
+/* Your Blogs */
+#yourBlogs{  
     width: 100%;
 
-    margin-top: 40px;
-    padding: 12px;
-    padding-left: 35px;
-
-    border-radius: 10px;
     background-color: rgba(15, 23, 42, 0.95);
     color: #F9FAFB;
-    
-}
-.text-roboto{
-    font-family: "Roboto",sans-serif;
-}
-.text-light-roboto{
-    font-size: 30px;
-    font-weight: 350;
     text-align: center;
     font-family: "Roboto",sans-serif;
+    font-size: 1.5rem;
+    
+    border-radius: 5px; 
 
-    padding: 0;
-    margin: 0;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
 }
 
-
+/* ====================================================== */
 /* Blog Content */
 #blog-content{
-    font-size: 20px;
-
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     justify-items: center;
@@ -130,11 +122,18 @@ body{
     width: 100%;
     height: 100%;
 
+    font-size: 20px;
+
     border-radius: 10px;
 }
 
 /* Blog Content > no blogs entries present */
 #no-blogs{
+    text-align: center;
+    font-family: "Roboto",sans-serif;
+    font-size: 30px;
+    font-weight: 350;
+
     margin: 10px;
 }
 
@@ -143,6 +142,7 @@ body{
 .blog-entry{
     display: flex;
     flex-direction: column;
+
     height: 150px;
     width: 300px;
 
@@ -155,38 +155,53 @@ body{
     margin: 25px;
 }
 .blog-entry:hover{
-    transform: translateY(-8px);
     background-color: #FF9A00;
     box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+    transform: translateY(-8px);
 }
+/* Individual blog entry components */
+#blog-entry-title{
+    height: 60%;
 
-.blog-content-title{
+    color: #FFFFFF;
+    text-align: center;
     text-align: left;
     font-size: 18px;
 
     padding-top: 10px;
     margin: 0 0 10px;
-    height: 60%;
-
-    color: #FFFFFF;
-    text-align: center;
 }
 
-.blog-content-author{
-    text-align: justify;
-    text-justify: inter-word;
-    font-size: 15px;
-    color: #94A3B8;
-    
-    padding: 10px;
-    margin: 0px;
+#blog-entry-author{
     height: 45%;
 
     background-color: aliceblue;
+    color: #94A3B8;
+    text-align: justify;
+    text-justify: inter-word;
+    font-size: 15px;
+    
+    padding: 10px;
+    margin: 0px;
 }
+/* ====================================================== */
+/* Media Queries for blog content */
 
-
-
+/* @media (max-width: 1000px) {
+    #homeScreen h1 {
+        align-items: center;
+        text-align: center;
+        font-size: 50px;
+    }
+    #userBreak{
+        display: block;
+    }
+} */
+/* @media (max-width: 1000px) {
+    .blog-button{
+    font-size: 0.8rem;
+    }
+} */
 /* @media (max-width: 1000px) {
     #no-blogs{
         text-align: center;

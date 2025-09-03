@@ -1,26 +1,26 @@
 <%- include('partials/header') %>
-    <div class="index-flex-container">
-        <div id="homeScreen">
-            <h1 class="text-light-roboto">Welcome <br><span id="userBreak"><%= locals.username%> </span></h1>
+    <div class="index-container flex-column-center">
+        <div id="homeScreen" class="flex-column-center">
+            <h1>Welcome <br><span id="userBreak"><%= locals.username%> </span></h1>
                 <a id="WriteBlog" class="blog-button" href="/write">
                     Write a blog and express yourself
                 </a>
         </div>
 
-        <div id="yourBlogs"><p class="text-light-roboto">Your Blogs</p></div>
-            <div id="blog-content">    
+        <div id="yourBlogs">Your Blogs</div>
+        <div id="blog-content">    
             <% if(locals.blogList.length === 0){ %>
                 <!--If not Blogs written-->
-                <div id="no-blogs">You have not written any blogs yet!</div>
+                <div id="no-blogs" class="text-light-roboto">You have not written any blogs yet!</div>
             <% } else { %>
                 <!--loads blog button for each written by the user from blogList-->
                 <% locals.blogList.forEach(function(blog) { %>
                     <a href="/blog/<%= blog.id %>" id="blog-id-<%= blog.id %>" class="blog-entry"> <!--individual blog entry id-->
-                        <div class="blog-content-title blog-content-text"><%= blog.title %></div>
-                       <div class="blog-content-author blog-content-text">author: <%= blog.author %></div>
+                        <div id="blog-entry-title" class="flex-column-center"><%= blog.title %></div>
+                        <div id="blog-entry-author" class="flex-column-center">author: <%= blog.author %></div>
                     </a>
                 <% }); %>
-                <% } %>
+            <% } %>
         </div>
     </div>
 <%- include('partials/footer') %>
