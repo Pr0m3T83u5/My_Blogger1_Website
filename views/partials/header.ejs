@@ -16,12 +16,14 @@
 </head>
 <header>
     <div id="navbar" class="navtext">
-        <div class="home navitems">
-            <a id="Home-ref" href="/home">Home</a>
-        </div>
-        <div class="read-write navitems">
-            <a id="logout-ref">Log-out</a>
-        </div>
+        <button id="Home-ref" class="home navitems">Home</button>
+        <% //if(userSignedIn) { %>
+            <button id="logout-ref" class="log-items navitems">Log-out</button>
+         <% //} %>
+        <% //else { %>
+            <button id="login-ref" class="log-items navitems">Log-in</button>
+            <button id="sign-up-ref" class="log-items navitems">Sign-up</button>
+        <%// } %>
     </div>
 </header>
 <body>

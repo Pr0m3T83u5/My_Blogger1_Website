@@ -6,6 +6,16 @@ $('#logout-ref').click(function() {
          window.location.href = '/login';
     });
 });
+$('#login-ref').click(function() {
+    window.location.href = '/login';
+});
+$('#sign-up-ref').click(function() {
+    window.location.href = '/signUp';
+});
+
+$('#Home-ref').click(function() {
+    window.location.href = '/home';
+});
 
 
 

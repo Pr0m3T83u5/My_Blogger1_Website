@@ -9,18 +9,21 @@
 
         <div id="yourBlogs"><p class="text-light-roboto">Your Blogs</p></div>
             <div id="blog-content">    
-            <% if(locals.blogList.length === 0){ %>
+            <% if(locals.blogList){ %>
+                <% if(locals.blogList.length === 0){ %>
                 <!--If not Blogs written-->
                 <div id="no-blogs">You have not written any blogs yet!</div>
-            <% } else { %>
-                <!--loads blog button for each written by the user from blogList-->
-                <% locals.blogList.forEach(function(blog) { %>
-                    <a href="/blog/<%= blog.id %>" id="blog-id-<%= blog.id %>" class="blog-entry"> <!--individual blog entry id-->
-                        <div class="blog-content-title blog-content-text"><%= blog.title %></div>
-                       <div class="blog-content-author blog-content-text">author: <%= blog.author %></div>
-                    </a>
-                <% }); %>
+                
+                <% } else { %>
+                    <!--loads blog button for each written by the user from blogList-->
+                    <% locals.blogList.forEach(function(blog) { %>
+                        <a href="/blog/<%= blog.id %>" id="blog-id-<%= blog.id %>" class="blog-entry"> <!--individual blog entry id-->
+                            <div class="blog-content-title blog-content-text"><%= blog.blog_title %></div>
+                        <div class="blog-content-author blog-content-text">author: <%= blog.user_name %></div>
+                        </a>
+                    <% }); %>
                 <% } %>
+            <% } %>
         </div>
     </div>
 <%- include('partials/footer') %>
