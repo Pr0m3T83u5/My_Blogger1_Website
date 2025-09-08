@@ -15,8 +15,25 @@ The Styles are organized as follows:
 >media queries for blog content
 */
 
+.index-flex-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+}
+a{
+    text-decoration: none;
+}
 
-.flex-column-center{
+.blocked{
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* ====================================================== */
+/* Homescreen */
+#homeScreen {
     display: flex;
     flex-direction: column;
     justify-content: center;

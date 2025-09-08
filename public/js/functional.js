@@ -1,13 +1,27 @@
 
 // Handle logout click event
 $('#logout-ref').click(function() {
-    alert("Do you really want to Log-out, all your saved blogs will be lost!");
-    $.post('/logout', function(){
-         window.location.href = '/login';
-    });
+    window.location.href = '/';
 });
-
-
+$('#sign-up-ref').click(function() {
+    window.location.href = '/signUp';
+});
+$('#Home-ref').click(function() {
+    window.location.href = '/home';
+});
+if($('#userBreak').text() === ''){
+        $('#WriteBlog').addClass('blocked');
+        $('#WriteBlog').text('Login to write a blog');
+        $('#yourBlogs p').text('Blogs');
+        $('#logout-ref').replaceWith('<button id="login-ref" class="log-items navitems">Login or Sign-up</button>');
+} else {
+    $('#WriteBlog').removeClass('blocked');
+    $('#WriteBlog').text('Write a blog and express yourself');
+}
+$('#login-ref').click(function() {
+    console.log("Login clicked");
+    window.location.href = '/login';
+});
 
 // Handle blog submission
 $('#blogSubmit').click(function() {
@@ -31,7 +45,7 @@ $('#blogSubmit').click(function() {
 
 
 
-// Handle when edit or delete button is clicked
+// Handle when edit or delete button is clicked IF user has access
 $('.edit-delete-button').click(function() {
     let blogId = $(this).attr('id').split('-')[2]; // Extract blog ID from button ID
     let action = $(this).attr('id').split('-')[0]; // "edit" or "delete"
@@ -47,6 +61,8 @@ $('.edit-delete-button').click(function() {
         });
     }
 });
+
+
 
 // Handle confirm Edit blog event
 $('#blogEdit').click(function() {
@@ -64,10 +80,11 @@ $('#blogEdit').click(function() {
         title: title,
         content: text
     };
-    alert("Confirm?");
-    $.post('/edit-blog/'+id, blogData,function() {
-        window.location.href = '/home'; // Redirect to home after editing
-    });
+    if(confirm("Confirm?")){
+        $.post('/edit-blog/'+ id, blogData, function() {
+        window.location.href = `/blog/${id}`; // Redirect to home after editing
+        });
+    }
 });
 
 

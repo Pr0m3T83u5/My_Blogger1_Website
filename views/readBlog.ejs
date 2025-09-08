@@ -1,18 +1,21 @@
 <%- include('partials/header') %>
+<% const accessStatus = (!locals.access) ? "blocked" : "" %>
     <div class="flex-container-for-bbr"> <!--bbr = blog being read--> 
+        <% if(blog.user_name === username){  %>
         <div id="edit-delete-blogs">
             <form action="/blog/<%= blog.id %>/edit" method="POST" style="display:inline">
                 <button role="link" id="edit-blog" class="blog-button edit-delete-button">Edit Blog</button>
             </form>
             <form action="/blog/<%= blog.id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete this blog?');">
-                <button type="submit" id="delete-blog" class="blog-button danger">Delete</button>
+                <button type="submit" id="delete-blog" class="blog-button edit-delete-button danger <% accessStatus %>">Delete</button>
             </form>
-        </div>   
+        </div>
+        <% } %>
         <div id="bbr">
-            <div><h1  id="bbr-title" class="text-roboto"><%= blog['title'] %></h1></div>
-            <div><h2 id="bbr-author" class="text-roboto">author: <%= blog['author'] %></h3></div>
-            <hr id="read-hr-baac"> <!--baac = between author and content-->
-            <div id="bbr-content"><%= blog['content'] %></div>
+            <div><h1  id="bbr-title" class="text-roboto"><%= blog['blog_title'] %></h1></div>
+            <div><h2 id="bbr-author" class="text-roboto">author: <%= blog['user_name'] %></h3></div>
+            <hr id="read-baac"> <!--baac = between author anf content-->
+            <div id="bbr-content"><%= blog['blog_content'] %></div>
         </div>
     </div>
 <%- include('partials/footer') %>

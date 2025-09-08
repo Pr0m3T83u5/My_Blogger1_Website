@@ -23,8 +23,11 @@ The Styles are organized as follows:
     background-color: red;
 }
 
+<<<<<<< HEAD
 /* ====================================================== */
 /* Blog Being Read(bbr) Screen */
+=======
+>>>>>>> database_funtn
 #bbr-title{
     text-align: center;
     font-family: "Roboto",sans-serif;

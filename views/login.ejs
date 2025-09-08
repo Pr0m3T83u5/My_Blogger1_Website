@@ -12,14 +12,16 @@
 
 
 <body>
-    <p id="login-heading" class="flex-column-center">Welcome to B<span id="blogger-letter-1">1</span>ogger One</p>
-    <div id="login-home-flex-container" class="flex-column-center">
-        <div id="login-box" class="flex-column-center">
-            <p>Enter your username!</p>
-            <form action="/home" method="POST" class="flex-column-center">
-                <input class="login-Text" type="text" id="username" name="username" required>
+    <p class="login-heading">Welcome back to B<span id="text1">1</span>ogger One</p>
+    <div class="login-home-flex-container">
+        <div id="login-box">
+            <p>Please <br> login</p>
+            <form action="/login" method="POST">
+                <input class="login-Text" type="text" id="username" name="username" placeholder="<%= locals.userNameError ? userNameError : 'Enter your Username'%>" required>
+                <input class="login-Text" type="password" id="password" name="password" placeholder="<%= locals.passNameError ? passNameError : 'Enter your Password'%>" required>
                 <br>
                 <button class="login-button" type="submit">Login</button>
+                <p class="signup-to-login">Dont have an account? Sign up <a href="/signUp">here</a></p>
             </form>
         </div>
     </div>
