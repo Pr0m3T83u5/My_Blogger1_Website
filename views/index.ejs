@@ -1,7 +1,8 @@
 <%- include('partials/header') %>
+<% const accessStatus = (!locals.access) ? "blocked" : "" %> <!--to block Write blog function if user not signed in-->
     <div class="index-flex-container">
         <div id="homeScreen">
-            <h1 class="text-light-roboto">Welcome <br><span id="userBreak"><%= locals.username%> </span></h1>
+            <h1 class="text-light-roboto">Welcome <br><span id="userBreak"><%= locals.username %></span></h1>
                 <a id="WriteBlog" class="blog-button" href="/write">
                     Write a blog and express yourself
                 </a>

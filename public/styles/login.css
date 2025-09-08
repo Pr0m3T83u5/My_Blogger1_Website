@@ -40,6 +40,7 @@ body{
     border: 3px solid black;
     border-radius: 10px;
     font-size: 20px;
+    width: 30%;
 }
 
 p{
@@ -48,6 +49,7 @@ p{
     padding-left: 10px;
     padding-right: 10px;
     font-size: 2rem;
+    text-align: center;
 }
 form{
     display: flex;
@@ -71,4 +73,8 @@ form{
     transform: scale(1.05);
     background-color: #FF9A00;
     color: rgba(15, 23, 42, 0.95);
+}
+.signup-to-login{
+    font-size: 0.7rem;
+    margin: 10px;
 }

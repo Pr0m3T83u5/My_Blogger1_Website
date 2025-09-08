@@ -15,12 +15,12 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "B1ogger",
-  password: ".......",
+  password: "...",
   port: 5432,
 });
 db.connect();
 
-var userLoggedIn = false; // Simulating user login status
+
 // var blogList = [{ 
 //   id: 1, 
 //   title: 'Welcome', 
@@ -41,6 +41,9 @@ app.use(session({
 }));
 
 //General Functions==================================
+//User related functions 
+var userLoggedIn = false; // Simulating user login status
+
 async function addUser(username, password) {
     let newUserId = await db.query(
       "INSERT INTO users (user_name, password) VALUES ($1, $2) RETURNING (id)",
@@ -83,6 +86,7 @@ async function checkPasswordExistance(username, pass){
   return userData.rows[0].id;
 }
 
+//Blog related functions
 async function addBlog(title, content, author) {
   await db.query(
     "INSERT INTO blogs (blog_title, blog_content, user_name) VALUES ($1, $2, $3) RETURNING (id)",
@@ -112,32 +116,44 @@ async function getBlogsByUser(username){
   );
   return blogs.rows;
 }
+
+async function editBlog(content, title, blogId){
+  await db.query(
+    "UPDATE blogs SET (blog_content,blog_title)=($1,$2) WHERE id=$3",
+    [content, title, blogId]
+  );
+}
+
+async function deleteBlog(blogId){
+  await db.query(
+    "DELETE FROM blogs WHERE id=$1",
+    [blogId]
+  );
+}
 //===================================================
 
 
 //Sever Routes=======================================
 // Root route
 app.get('/', (req, res) => {
-  // if (!userLoggedIn) {
-    res.redirect('/home');
-  // }
+  req.session.destroy();
+  res.redirect('/home');
 });
 // Home route
 app.get('/home', async (req, res) => {
-  // console.log(blogList);
-  
   try{
     const userName = await getUserName(req.session.userId);
     const blogList = await getBlogsByUser(userName);
     res.render('index.ejs', {
-    username:  userName || 'Guest',
-    blogList: blogList
+      username:  userName,
+      blogList: blogList || [],
+      access: userLoggedIn || false
     });
   } catch(err){
     let blogList = await getAllBlogs();
-    console.log(blogList[0]);
     res.render('index.ejs', {
-    blogList: blogList
+    blogList: blogList,
+    access: userLoggedIn || false
     });
   }
 });
@@ -189,6 +205,7 @@ app.post('/login', async (req, res) => {
     try{ //if Wrong password
       let UserId = await checkPasswordExistance(req.body.username, req.body.password);
       req.session.userId = UserId; //Store Username in session
+      userLoggedIn = true;
       res.redirect('/home');
     } catch(err){
       console.log(err);
@@ -200,67 +217,64 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Logout route
-app.post('/logout', (req, res) => {
-  req.session.destroy();
-  res.redirect('/home'); // Redirect to login page
-});
 //====================================================
 
 
 
-// Blog route for writing blogs
+//Write, Edit, Read and Delete Blog routes=================
+//Write Blog Route
 app.get('/write', (req, res) => {
   res.render('writeEditBlog.ejs', {action: 'write' });
 });
-// Blog submit route when "Submit Blog" button clicked
+//when sumbit button is clicked
 app.post('/submitted-blog', async (req, res) => {
   let userName = await getUserName(req.session.userId);
   await addBlog(req.body['title'], req.body['content'], userName || 'Anonymous');
   res.redirect('/home'); // Redirect to home to see the updated blog list
 });
 
-
-// Blog route for reading blogs
+//Read Blog Route
 app.get('/blog/:id', async (req, res) => {
       let bbrId = parseInt(req.params.id, 10); // Get blogID from path parameter
       let blog = await getBlogById(bbrId);
-      console.log(blog);
-      res.render('readBlog.ejs', { blog: blog });
+      try{
+        let userName = await getUserName(req.session.userId);
+        res.render('readBlog.ejs', { blog: blog, username: userName});
+      } catch(err){
+        console.log(err);
+        res.render('readBlog.ejs', { blog: blog, username: null});
+      }
+      
     });
-
-
 
 // Edit blog route
 // Getting the Edit request for the particular blog
 app.post('/blog/:id/edit', (req, res) => {
   let blogId = parseInt(req.params.id, 10);
-  console.log(blogId);
   res.redirect('/blog/'+blogId+'/edit');
 });
 // Rendering the edit page with the blog details
-app.get('/blog/:id/edit', (req, res) => {
+app.get('/blog/:id/edit', async (req, res) => {
   let blogId = parseInt(req.params.id, 10);
-  let blog = getBlogById(blogId);
+  let blog = await getBlogById(blogId);
   res.render('writeEditBlog.ejs', {blogID: blogId, blog: blog, action: 'edit' });
 });
 // Posting the edited blog details
-app.post('/edit-blog/:id', (req, res) => {
+app.post('/edit-blog/:id', async (req, res) => {
   let blogId = parseInt(req.params.id, 10);
-  const blog = getBlogById(blogId);
-  if (blog) {
-    blog.title = req.body['title'];
-    blog.content = req.body['content'];
-    res.redirect('/home'); // Redirect to home to see the updated blog list
-  } else {
-    res.status(404).send('Blog not found');
+  try{
+    await editBlog(req.body['content'], req.body['title'], blogId);
+    res.redirect('/blog/'+blogId);
+  } catch(err){
+    console.log(err);
+    // res.render('writeEditBlog.ejs', {blogID: blogId, blog: blog, action: 'edit', error: "Error updating the blog. Please try again." });
   }
 });
 
 // Delete blog route
-app.post('/blog/:id/delete', (req, res) => {
+app.post('/blog/:id/delete', async (req, res) => {
   const blogId = parseInt(req.params.id, 10);
-  blogList = blogList.filter(b => b.id !== blogId); // Remove the blog from the list
+  await deleteBlog(blogId); // Remove the blog from the list
   res.redirect('/home'); // Redirect to home to see the updated blog list
 });
 

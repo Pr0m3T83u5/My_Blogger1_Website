@@ -13,9 +13,9 @@
             <form action="/edit-blog" class="blogText-form" method="POST">
                 <input type="hidden" id="id" name="id" value="<%= locals.blogID %>">
                 <label for="blog-title" id="blogTitle">Blog Title:</label>
-                <input type="text" id="blog-title" name="blog-title" value="<%= locals.blog.title %>" autofocus autocomplete="off" placeholder="Enter your Blog Title" required>
+                <input type="text" id="blog-title" name="blog-title" value="<%= locals.blog.blog_title %>" autofocus autocomplete="off" placeholder="Enter your Blog Title" required>
                 <label for="blog-text" id="writeYourBlogHere">Edit your blog here...</label>
-                <textarea id="blog-text" name="blog-text" placeholder="Express yourself here..." required><%= locals.blog.content %></textarea>
+                <textarea id="blog-text" name="blog-text" placeholder="Express yourself here..." required><%= locals.blog.blog_content %></textarea>
             </form>
             <button id="blogEdit" class="blog-button">Confirm</button>
         <%} %>

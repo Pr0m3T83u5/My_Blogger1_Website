@@ -32,7 +32,15 @@ body{
     align-items: center;
     height: 100vh;
 }
+a{
+    text-decoration: none;
+}
 
+.blocked{
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
 
 /* ====================================================== */
 /* Homescreen */
