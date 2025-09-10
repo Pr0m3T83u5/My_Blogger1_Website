@@ -11,6 +11,7 @@ Welcome to my first website created entirely by me from scratch.
 *  [Jquery](https://jquery.com/)
 *  [ExpressJS](https://expressjs.com/)
 *  [EJS](https://ejs.co/)
+*  [PostgreSQL](https://www.postgresql.org/)
 
 ## Key Features
 - ⚙️ Runs on an Express.js server with EJS-based dynamic webpages
