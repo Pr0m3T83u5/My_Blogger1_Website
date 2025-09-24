@@ -2,9 +2,11 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import session from 'express-session';
 import pg from 'pg';
+import bcrypt from 'bcrypt';
 
 const app = express();
 const PORT = 3000;
+const saltingRounds = 10;
 
 //Setting up SQL Client
 /* 
@@ -30,9 +32,14 @@ app.use(session({
 }));
 
 //General Functions==================================
-//User related functions 
-var userLoggedIn = false; // Simulating user login status
+/**
+ * User Related functions
+ * Blog related functions
+ */
 
+
+
+//User related functions 
 /**
  * Adds a new user to the database table 'users'
  * @param {String} username Username of the user
@@ -40,11 +47,10 @@ var userLoggedIn = false; // Simulating user login status
  * @returns the added user's ID
  */
 async function addUser(username, password) {
-    let newUserId = await db.query(
+    await db.query(
       "INSERT INTO users (user_name, password) VALUES ($1, $2) RETURNING (id)",
       [username,password]
     )
-    return newUserId.rows[0].id;
 }
 
 /**
@@ -81,26 +87,12 @@ async function getUserID(username) {
  *          else throws error
  */
 async function checkUser(username){
-   let userName = await db.query(
-    "SELECT user_name from users WHERE user_name=$1",
+   let userData = await db.query(
+    "SELECT * from users WHERE user_name=$1",
     [username]
   );
 
-  return userName.rows[0].user_name;
-}
-/**
- * Check if the password matches the username in the database
- * @param {String} username username entered by the user
- * @param {String} pass password entered by the user
- * @returns userID if the username and password match
- *          else throws error
- */
-async function checkPasswordExistance(username, pass){
-  const userData = await db.query(
-    "SELECT id FROM users WHERE user_name=$1 AND password=$2",
-    [username,pass]
-  );
-  return userData.rows[0].id;
+  return userData;
 }
 
 //Blog related functions
@@ -194,13 +186,12 @@ app.get('/home', async (req, res) => {
     res.render('index.ejs', {
       username:  userName,
       blogList: blogList || [],
-      access: userLoggedIn || false
     });
+    console.log(userName);
   } catch(err){
     let blogList = await getAllBlogs();
     res.render('index.ejs', {
     blogList: blogList,
-    access: userLoggedIn || false
     });
   }
 });
@@ -220,12 +211,24 @@ app.get('/signUp', (req, res) => {
 });
 // ADD User to the database
 app.post('/addUser', async (req, res) => {
-  try{
-    let newUserId = await addUser(req.body.username, req.body.password);
-    res.redirect('/login');
-  } catch(err){ //If User already exists
-    console.log(err);
+  let userName = req.body.username;
+  let userData = await checkUser(userName);
+  if(userData.rows.length > 0){
     res.redirect('/signUp?err=1');
+  } else{
+    try{
+      //password hashing
+      bcrypt.hash(req.body.password, saltingRounds, async (err, hash) =>{
+        if(err){
+          console.log('Error in pass Hashing:', err);
+        } else{
+          await addUser(req.body.username, hash);
+        res.redirect('/login');
+        }
+      });
+    } catch(err){ //If User already exists
+      console.log(err);
+    }
   }
 });
 
@@ -246,20 +249,35 @@ app.get('/login', (req,res) => {
 })
 // Login form submission
 app.post('/login', async (req, res) => {
-  try{ 
-    let userName = await checkUser(req.body.username);
-    try{ 
-      let UserId = await checkPasswordExistance(req.body.username, req.body.password);
-      req.session.userId = UserId; //Store Username in session
-      userLoggedIn = true;
-      res.redirect('/home');
-    } catch(err){ //Wrong password
-      console.log(err);
-      res.redirect('/login?err=2');
-    }
-  } catch(err){ //Non-existing User
-    console.log(err);
-    res.redirect('/login?err=1');
+  let userName = req.body.username;
+  let userData = await checkUser(userName);
+
+  //Check if User already exists
+  if(userData.rows.length > 0){
+
+    //get stored hash password
+    let userDataPassword = await db.query(
+    "SELECT password FROM users WHERE user_name=$1",
+    [userName]
+    );
+
+    //compare hash passwords
+    bcrypt.compare(req.body.password, userDataPassword.rows[0].password, async (err, result) =>{
+      if(err){
+        console.log("Error in comparing passwords: ", err);
+      } else {
+        if(result){ //if password matches
+          req.session.userId = await getUserID(userName); //Store Username in session
+          res.redirect('/home');
+        } else {
+          res.redirect('/login?err=2'); //Wrong password Error
+        }
+      }
+    });
+
+  //User ist registered
+  } else {
+    res.redirect('/login?err=1'); //Non-existing User Error
   }
 });
 //====================================================

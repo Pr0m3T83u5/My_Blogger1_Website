@@ -23,11 +23,9 @@ The Styles are organized as follows:
     background-color: red;
 }
 
-<<<<<<< HEAD
 /* ====================================================== */
 /* Blog Being Read(bbr) Screen */
-=======
->>>>>>> database_funtn
+
 #bbr-title{
     text-align: center;
     font-family: "Roboto",sans-serif;
@@ -46,7 +44,7 @@ The Styles are organized as follows:
 
     padding-left: 3rem;
 }
-#read-hr-baac{   /* baac = between author and content */
+#read-baac{   /* baac = between author and content */
     width: 90%;
 
     border: dotted 4px;

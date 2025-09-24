@@ -31,6 +31,11 @@ a{
     cursor: not-allowed;
 }
 
+p{
+    padding: 0;
+    margin: 0;
+}
+
 /* ====================================================== */
 /* Homescreen */
 #homeScreen {
@@ -118,7 +123,7 @@ a{
     color: #F9FAFB;
     text-align: center;
     font-family: "Roboto",sans-serif;
-    font-size: 1.5rem;
+    font-size: 2rem;
     
     border-radius: 5px; 
 
@@ -140,7 +145,6 @@ a{
     height: 100%;
 
     font-size: 20px;
-
     border-radius: 10px;
 }
 
@@ -151,6 +155,7 @@ a{
     font-size: 30px;
     font-weight: 350;
 
+    width: 100%;
     margin: 10px;
 }
 

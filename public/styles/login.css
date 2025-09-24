@@ -54,17 +54,25 @@ form{
 /* ====================================================== */
 /* Login Box */
 #login-home-flex-container {
-    height: 80vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
     width: 100%;
 }
 
 #login-box{
-    font-size: 20px;
-
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border: 3px solid black;
     border-radius: 10px;
     font-size: 20px;
-    width: 30%;
+
+    height: 250px;
+    width: 400px;
 }
 
 p{
@@ -72,6 +80,7 @@ p{
     padding-top: 10px;
     padding-left: 10px;
     padding-right: 10px;
+    
     font-size: 2rem;
     text-align: center;
 }
