@@ -15,10 +15,15 @@
     <p class="login-heading">Welcome back to B<span id="text1">1</span>ogger One</p>
     <div id="login-home-flex-container">
         <div id="login-box">
-            <p>Please <br> login</p>
+            <% if(locals.error) { %>
+            <p>Please login</p>
+            <p><%= locals.error %></p>
+            <% } else { %>
+                <p>Please <br> login</p>
+            <% } %>
             <form action="/login" method="POST">
-                <input class="login-Text" type="text" id="username" name="username" placeholder="<%= locals.userNameError ? userNameError : 'Enter your Username'%>" required>
-                <input class="login-Text" type="password" id="password" name="password" placeholder="<%= locals.passNameError ? passNameError : 'Enter your Password'%>" required>
+                <input class="login-Text" type="text" id="username" name="username" placeholder="Enter your Username" required>
+                <input class="login-Text" type="password" id="password" name="password" placeholder="Enter your Password" required>
                 <br>
                 <button class="login-button" type="submit">Login</button>
                 <p class="signup-to-login">Dont have an account? Sign up <a href="/signUp">here</a></p>

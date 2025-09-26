@@ -1,5 +1,4 @@
 <%- include('partials/header') %>
-<% const accessStatus = (!locals.access) ? "blocked" : "" %>
     <div class="flex-container-for-bbr"> <!--bbr = blog being read--> 
         <% if(blog.user_name === username){  %>
         <div id="edit-delete-blogs">
@@ -7,7 +6,7 @@
                 <button role="link" id="edit-blog" class="blog-button edit-delete-button">Edit Blog</button>
             </form>
             <form action="/blog/<%= blog.id %>/delete" method="POST" style="display:inline" onsubmit="return confirm('Delete this blog?');">
-                <button type="submit" id="delete-blog" class="blog-button edit-delete-button danger <% accessStatus %>">Delete</button>
+                <button type="submit" id="delete-blog" class="blog-button edit-delete-button danger">Delete</button>
             </form>
         </div>
         <% } %>

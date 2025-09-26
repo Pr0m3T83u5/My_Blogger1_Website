@@ -1,8 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import session from 'express-session';
 import pg from 'pg';
 import bcrypt from 'bcrypt';
+import session from 'express-session';
+import passport from 'passport';
+import { Strategy } from 'passport-local';
 
 const app = express();
 const PORT = 3000;
@@ -22,14 +24,25 @@ const db = new pg.Client({
 });
 db.connect();
 
-// Middleware setup
+// Middleware setup==================================
 app.use(express.static('public')); // Serve static files from the 'public' directory
 app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
+
+//Create a Session
 app.use(session({
   secret: 'mySecretKey',
   resave: false,
   saveUninitialized: true,
+  cookie: {
+    maxAge: 1000*60*60*24 //in milliseconds: 1000ms => 1s => 1s*60 => 1min*60 = 1hr*24 => 1day
+  }
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+//===================================================
+
 
 //General Functions==================================
 /**
@@ -172,7 +185,7 @@ async function deleteBlog(blogId){
 //===================================================
 
 
-//Sever Routes=======================================
+//==================================================================Server Routes==================================================================
 // Root route
 app.get('/', (req, res) => {
   req.session.destroy();
@@ -180,24 +193,24 @@ app.get('/', (req, res) => {
 });
 // Home route
 app.get('/home', async (req, res) => {
-  try{
-    const userName = await getUserName(req.session.userId);
-    const blogList = await getBlogsByUser(userName);
-    res.render('index.ejs', {
-      username:  userName,
-      blogList: blogList || [],
-    });
-    console.log(userName);
-  } catch(err){
-    let blogList = await getAllBlogs();
-    res.render('index.ejs', {
-    blogList: blogList,
-    });
+  if(req.isAuthenticated()){
+      const userName = req.user.user_name;
+      const blogList = await getBlogsByUser(userName);
+      res.render('index.ejs', {
+        username:  userName,
+        blogList: blogList || [],
+      });
+      console.log(userName);
+  }else{
+      let blogList = await getAllBlogs();
+      res.render('index.ejs', {
+      blogList: blogList,
+      });
   }
 });
-//===================================================
+//========================================================
 
-// Login, SignUp and Logout routes===================
+// Login, SignUp and Logout routes========================
 //Sign-Up ---- New User
 app.get('/signUp', (req, res) => {
   let errorCode = req.query.err;
@@ -235,53 +248,21 @@ app.post('/addUser', async (req, res) => {
 // Login page ---- Existing User
 app.get('/login', (req,res) => {
   let errorCode = req.query.err;
-  if(errorCode === '1'){
+  if(errorCode === '0'){
     res.render('login.ejs', {
-      userNameError: "Incorrect UserName",
-    });
-  } else if(errorCode === '2'){
-    res.render('login.ejs', {
-      passNameError: "Incorrect password",
+      error: "Incorrect Credentials",
     });
   } else {
     res.render('login.ejs');
   }
 })
 // Login form submission
-app.post('/login', async (req, res) => {
-  let userName = req.body.username;
-  let userData = await checkUser(userName);
-
-  //Check if User already exists
-  if(userData.rows.length > 0){
-
-    //get stored hash password
-    let userDataPassword = await db.query(
-    "SELECT password FROM users WHERE user_name=$1",
-    [userName]
-    );
-
-    //compare hash passwords
-    bcrypt.compare(req.body.password, userDataPassword.rows[0].password, async (err, result) =>{
-      if(err){
-        console.log("Error in comparing passwords: ", err);
-      } else {
-        if(result){ //if password matches
-          req.session.userId = await getUserID(userName); //Store Username in session
-          res.redirect('/home');
-        } else {
-          res.redirect('/login?err=2'); //Wrong password Error
-        }
-      }
-    });
-
-  //User ist registered
-  } else {
-    res.redirect('/login?err=1'); //Non-existing User Error
+app.post('/login', passport.authenticate("local", {
+  successRedirect: "/home",
+  failureRedirect: "/login?err=0"
   }
-});
-//====================================================
-
+));
+//========================================================
 
 
 //Write, Edit, Read and Delete Blog routes=================
@@ -291,9 +272,13 @@ app.get('/write', (req, res) => {
 });
 //when sumbit button is clicked
 app.post('/submitted-blog', async (req, res) => {
-  let userName = await getUserName(req.session.userId);
-  await addBlog(req.body['title'], req.body['content'], userName || 'Anonymous');
-  res.redirect('/home'); // Redirect to home to see the updated blog list
+  if(req.isAuthenticated()){
+    let userName = req.user.user_name;
+    await addBlog(req.body['title'], req.body['content'], userName || 'Anonymous');
+    res.redirect('/home'); // Redirect to home to see the updated blog list
+  } else {
+    res.redirect('/home');
+  }
 });
 
 //Read Blog Route-----------------
@@ -301,27 +286,37 @@ app.get('/blog/:id', async (req, res) => {
       let bbrId = parseInt(req.params.id, 10); // Get blogID from path parameter
       let blog = await getBlogById(bbrId);
       try{
-        let userName = await getUserName(req.session.userId);
+        let userName = '';
+        if(req.isAuthenticated()) userName=req.user.user_name;
         res.render('readBlog.ejs', { blog: blog, username: userName});
       } catch(err){
         console.log(err);
         res.render('readBlog.ejs', { blog: blog, username: null});
       }
-      
     });
 
 // Edit blog route----------------
 // Getting the Edit request for the particular blog
 app.post('/blog/:id/edit', (req, res) => {
   let blogId = parseInt(req.params.id, 10);
-  res.redirect('/blog/'+blogId+'/edit');
+  if(req.isAuthenticated()){
+    res.redirect('/blog/'+blogId+'/edit');
+  } else {
+    res.redirect('/blog/'+blogId)
+  }
 });
 // Rendering the edit page with the blog details
 app.get('/blog/:id/edit', async (req, res) => {
   let blogId = parseInt(req.params.id, 10);
   let blog = await getBlogById(blogId);
-  res.render('writeEditBlog.ejs', {blogID: blogId, blog: blog, action: 'edit' });
+  if(req.isAuthenticated()){
+    res.render('writeEditBlog.ejs', {blogID: blogId, blog: blog, action: 'edit' });
+  } else{
+    res.render('writeEditBlog.ejs', {action: 'AuthError' });;
+  }
+  
 });
+
 // Posting the edited blog details
 app.post('/edit-blog/:id', async (req, res) => {
   let blogId = parseInt(req.params.id, 10);
@@ -335,11 +330,47 @@ app.post('/edit-blog/:id', async (req, res) => {
 
 // Delete blog route----------------
 app.post('/blog/:id/delete', async (req, res) => {
+  if(req.isAuthenticated()){
   const blogId = parseInt(req.params.id, 10);
   await deleteBlog(blogId); // Remove the blog from the list
   res.redirect('/home'); // Redirect to home to see the updated blog list
+  } else{
+    res.redirect('/login');
+  }
 });
-//=======================================================
+//========================================================
+
+//Passport local-Stratergy implementation
+passport.use(new Strategy(async (username, password, cb) => {
+  try {
+    let userData = await checkUser(username);
+
+    //User Doenst Exist
+    if (userData.rows.length === 0) {
+      return cb(null, false);
+    }
+
+    const user = userData.rows[0];
+    const match = await bcrypt.compare(password, user.password);
+
+    // Hash Password matches the stored Hash Password
+    if (match) {
+      return cb(null, user);
+    } else {
+      return cb(null, false);
+    }
+  } catch (err) {
+    return cb(err);
+  }
+}));
+
+
+passport.serializeUser((user, cb) => {
+  cb(null, user);
+})
+passport.deserializeUser((user, cb) =>{
+  cb(null, user);
+})
 
 //listening to the server
 app.listen(PORT, () => {

@@ -12,12 +12,14 @@ Welcome to my first website created entirely by me from scratch. The only purpos
 *  [ExpressJS](https://expressjs.com/)
 *  [EJS](https://ejs.co/)
 *  [PostgreSQL](https://www.postgresql.org/)
-*  [Bcrypt]()
+*  [Bcrypt](https://www.npmjs.com/package/bcrypt)
+*  [PassportJS](https://www.passportjs.org/)
 
 ## Key Features
 - ⚙️ Runs on an Express.js server with EJS-based dynamic webpages
 - 🕹️ Connected with PostgreSQL (read further on how to create the database and join it with the server)
 - 👨‍💻 Uses Bcrypt to "hash and salt" encrypt user passwords
+-  Authentication is done by a local Stratergy via PassportJS
   
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -82,7 +84,7 @@ Welcome to my first website created entirely by me from scratch. The only purpos
 - [ ] Security Features
     - [x] Only logged-in users can edit/delete their own blogs
     - [x] Users need to log-in to create a blog
-    - [ ] Access restriction using the Web-search bar
+    - [x] Access restriction using the Web-search bar
 - [ ] Logged-in user have option to see only their own blogs or all the blogs
 - [ ] Add API functionality
 - [ ] Add Content-Management-System support

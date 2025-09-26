@@ -7,17 +7,21 @@ $('#sign-up-ref').click(function() {
     window.location.href = '/signUp';
 });
 $('#Home-ref').click(function() {
+    console.log("hi");
     window.location.href = '/home';
 });
+
+ 
 if($('#userBreak').text() === ''){
-        $('#WriteBlog').addClass('blocked');
-        $('#WriteBlog').text('Login to write a blog');
-        $('#yourBlogs p').text('Blogs');
-        $('#logout-ref').replaceWith('<button id="login-ref" class="log-items navitems">Login or Sign-up</button>');
+    $('#WriteBlog').addClass('blocked');
+    $('#WriteBlog').text('Login to write a blog');
+    $('#yourBlogs p').text('Blogs');
+    $('#logout-ref').replaceWith('<button id="login-ref" class="log-items navitems">Login or Sign-up</button>');
 } else {
     $('#WriteBlog').removeClass('blocked');
     $('#WriteBlog').text('Write a blog and express yourself');
 }
+
 $('#login-ref').click(function() {
     console.log("Login clicked");
     window.location.href = '/login';
@@ -37,10 +41,11 @@ $('#blogSubmit').click(function() {
         title: title,
         content: text
     };
-    alert("Do you really want to submit your blog?");
-    $.post('/submitted-blog', blogData, function() {
+    if(confirm("Do you really want to submit your blog?")){
+        $.post('/submitted-blog', blogData, function() {
         window.location.href = '/home'; // Redirect to home after submission 
     });
+    }
 });
 
 

@@ -1,7 +1,9 @@
 <%- include('partials/header') %>
 <div id="blog">
     <div id="blogHeading" class="blogText-class"></div>
-        <% if(locals.action === 'write') {%>
+        <% if(locals.action === 'AuthError'){ %>
+            <h1>Access not granted</h1>
+        <%} else if(locals.action === 'write') {%>
             <form action="/write-blog" class="blogText-form" method="POST">
                 <label for="blog-title" id="blogTitle">Blog Title:</label>
                 <input type="text" id="blog-title" name="blog-title" autofocus autocomplete="off" placeholder="Enter your Blog Title"  required>
