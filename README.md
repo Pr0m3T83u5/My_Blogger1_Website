@@ -18,8 +18,9 @@ Welcome to my first website created entirely by me from scratch. The only purpos
 ## Key Features
 - ⚙️ Runs on an Express.js server with EJS-based dynamic webpages
 - 🕹️ Connected with PostgreSQL (read further on how to create the database and join it with the server)
-- 👨‍💻 Uses Bcrypt to "hash and salt" encrypt user passwords
--  Authentication is done by a local Stratergy via PassportJS
+- 🔐 Uses Bcrypt to "hash and salt" encrypt user passwords
+- 🔐 Authentication is done by a local Stratergy via PassportJS
+- 👨‍💻 Uses dotenv to create environment variables
   
   <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -33,7 +34,7 @@ Welcome to my first website created entirely by me from scratch. The only purpos
 
 ### Instructions to Start the Website
 1. **Create a Database**  
-   In pgAdmin, create a new database named **B1ogger** (note the number `1` instead of letter `l`) under the user `postgres`.
+   In pgAdmin, create a new database.
 
 2. **Create Tables**  
    Run the following SQL queries:
@@ -60,12 +61,22 @@ Welcome to my first website created entirely by me from scratch. The only purpos
    git remote -v # confirm the changes
    ```
 
-5. **Configure Database Connection**  
-   Open `index.js` and change the client details for your SQL server.
-
-6. **Install Dependencies**
+5. **Install Dependencies**
    ```bash
    npm i
+   ```
+
+6. **Configure Database Connection**  
+   2 Options:
+   a)(without a .env file) Change the following configuration data(below) in the index.js file with the details of your Database and add a session key
+   b)Create an dotenv(.env) file and define the following data with the required values
+   ```bash
+   process.env.SQL_USER
+   process.env.SQL_HOST
+   process.env.SQL_DB_NAME
+   process.env.SQL_PASSWORD
+   process.env.SQL_PORT
+   process.env.SESSION_SECRET
    ```
 
 7. **Run the App**

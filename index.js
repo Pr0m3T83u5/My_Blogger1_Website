@@ -5,10 +5,12 @@ import bcrypt from 'bcrypt';
 import session from 'express-session';
 import passport from 'passport';
 import { Strategy } from 'passport-local';
+import env from "dotenv";
 
 const app = express();
 const PORT = 3000;
 const saltingRounds = 10;
+env.config();
 
 //Setting up SQL Client
 /* 
@@ -16,11 +18,11 @@ a database named "B1ogger" should be created in PostgreSQL before running the se
 password for the database should be added here
 */
 const db = new pg.Client({
-  user: "postgres",
-  host: "localhost",
-  database: "B1ogger", // Database name
-  password: "...", // Add your database password here
-  port: 5432,
+  user: process.env.SQL_USER || "postgres", 
+  host: process.env.SQL_HOST || "localhost", 
+  database: process.env.SQL_DB_NAME, // Database name from environment file
+  password: process.env.SQL_PASSWORD, // Database password from environment file
+  port: process.env.SQL_PORT || 5432, 
 });
 db.connect();
 
@@ -30,7 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true })); // Parse URL-encoded bodies
 
 //Create a Session
 app.use(session({
-  secret: 'mySecretKey',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cookie: {
@@ -81,7 +83,7 @@ async function getUserName(userID){
 }
 
 /**
- * Return the ID of the user based off the username
+ * Return the ID of the user based off th:e username
  * @param {String} username 
  * @returns ID of the user
  */
